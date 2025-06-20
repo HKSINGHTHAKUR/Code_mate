@@ -36,6 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tanmay.codo.ui.HomeScreen
 import com.tanmay.codo.ui.LearnScreen
+import com.tanmay.codo.ui.LoginScreen
 import com.tanmay.codo.ui.PracticeScreen
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.tanmay.codo.ui.ProfileScreen
@@ -63,17 +64,29 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodoTheme {
                 val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        BottomNavigationBar(navController)
+                        if (currentRoute != "login") {
+                            BottomNavigationBar(navController)
+                        }
                     }
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "home",
+                        startDestination = "login",
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        composable("login") {
+                            LoginScreen(onLoginSuccess = {
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            })
+                        }
                         composable("home") {
                             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                                 HomeScreen(
