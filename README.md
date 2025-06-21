@@ -1,4 +1,4 @@
-contribution 
+Contribution 
 
 Harsh Kumar singh - Video representation and implementation , UI / UX Design
 
